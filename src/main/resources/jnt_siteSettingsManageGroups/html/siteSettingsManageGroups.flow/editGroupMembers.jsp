@@ -17,7 +17,7 @@
 <%--@elvariable id="mailSettings" type="org.jahia.services.mail.MailSettings"--%>
 <%--@elvariable id="flowRequestContext" type="org.springframework.webflow.execution.RequestContext"--%>
 <%--@elvariable id="flowExecutionUrl" type="java.lang.String"--%>
-<%--@elvariable id="memberSearchCriteria" type="org.jahia.modules.sitesettings.groups.SearchCriteria"--%>
+<%--@elvariable id="memberSearchCriteria" type="org.jahia.services.usermanager.SearchCriteria"--%>
 
 <template:addResources type="javascript" resources="jquery.min.js,jquery-ui.min.js,admin-bootstrap.js"/>
 <template:addResources type="css"
