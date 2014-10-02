@@ -28,7 +28,7 @@
 <fmt:message var="i18nRemoveMultipleConfirm" key="siteSettings.groups.removeMembers.confirm"/>
 <fmt:message var="i18nContinue" key="label.confirmContinue"/>
 
-<c:set var="isGroupEditable" value="${!group.provider.readOnly}"/>
+<c:set var="isGroupEditable" value="${!providers[group.providerName].readOnly}"/>
 
 <c:if test="${isGroupEditable}">
 <template:addResources>
@@ -217,7 +217,7 @@ $(document).ready(function() {
                     <c:otherwise>
                         <fmt:message var="i18nRemove" key="label.remove"/><c:set var="i18nRemove" value="${fn:escapeXml(i18nRemove)}"/>
                         <c:forEach items="${members}" var="member" end="${memberDisplayLimit - 1}" varStatus="loopStatus">
-                            <c:set var="principalType" value="${jcr:isNodeType(member,'jnt:user')?'u':'g'}"/>
+                            <c:set var="principalType" value="${user:principalType(member)}"/>
                             <c:set var="principalIcon" value="${principalType == 'u' ? 'usersmall' : 'group-icon'}"/>
                             <c:set var="principalKey" value="${principalType}:${principalType == 'u' ? member.userKey : member.groupKey}"/>
                             <tr>
