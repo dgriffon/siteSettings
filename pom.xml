@@ -5,7 +5,7 @@
     =                   JAHIA'S DUAL LICENSING - IMPORTANT INFORMATION                       =
     ==========================================================================================
 
-        Copyright (C) 2002-2014 Jahia Solutions Group SA. All rights reserved.
+        Copyright (C) 2002-2015 Jahia Solutions Group SA. All rights reserved.
 
         THIS FILE IS AVAILABLE UNDER TWO DIFFERENT LICENSES:
         1/GPL OR 2/JSEL
@@ -81,14 +81,14 @@
         <version>7.1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>siteSettings</artifactId>
+    <version>7.1.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>Jahia Site Settings</name>
     <description>Settings (groups,tools, etc) for site.</description>
     <scm>
-        <connection>scm:svn:https://devtools.jahia.com/svn/jahia/trunk/modules/siteSettings</connection>
-        <developerConnection>scm:svn:https://devtools.jahia.com/svn/jahia/trunk/modules/siteSettings
-        </developerConnection>
-        <url>https://devtools.jahia.com/svn/jahia/trunk/modules/siteSettings</url>
+        <connection>scm:git:git@github.com:Jahia/siteSettings-ee.git</connection>
+        <developerConnection>scm:git:git@github.com:Jahia/siteSettings-ee.git</developerConnection>
+        <url>scm:git:git@github.com:Jahia/siteSettings-ee.git</url>
     </scm>
 
     <properties>
