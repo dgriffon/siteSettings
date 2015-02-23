@@ -86,9 +86,9 @@
     <name>Jahia Site Settings</name>
     <description>Settings (groups,tools, etc) for site.</description>
     <scm>
-        <connection>scm:git:git@github.com:Jahia/siteSettings-ee.git</connection>
-        <developerConnection>scm:git:git@github.com:Jahia/siteSettings-ee.git</developerConnection>
-        <url>scm:git:git@github.com:Jahia/siteSettings-ee.git</url>
+        <connection>scm:git:git@github.com:Jahia/siteSettings.git</connection>
+        <developerConnection>scm:git:git@github.com:Jahia/siteSettings.git</developerConnection>
+        <url>scm:git:git@github.com:Jahia/siteSettings.git</url>
     </scm>
 
     <properties>
