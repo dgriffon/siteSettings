@@ -51,7 +51,7 @@
 
             <fieldset>
                 <div class="alert alert-info">
-                    <label for="csvFile"><fmt:message key="label.csvFile"/></label>
+                    <label for="csvFile"><fmt:message key="label.csvFile"/> <span class="text-error"><strong>*</strong></span></label>
                     <input type="file" name="csvFile" id="csvFile"/>
                 </div>
                 <label for="csvSeparator"><fmt:message key="label.csvSeparator"/></label>
