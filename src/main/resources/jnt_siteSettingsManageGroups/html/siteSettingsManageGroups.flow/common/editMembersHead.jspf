@@ -15,35 +15,35 @@
 <h2><fmt:message key="label.group"/>: ${fn:escapeXml(user:displayName(group))}</h2>
 
 <script type="text/javascript">
-    var addedMembers = []
-    var removedMembers = []
+    var addedMembers = [];
+    var removedMembers = [];
+
+    function selectMember(input) {
+        var $input = $(input);
+
+        var name = '${prefix}' + $input.attr('value');
+        if ($input.is(':checked')) {
+            if (removedMembers.indexOf(name) > -1) {
+                removedMembers.splice(removedMembers.indexOf(name),1)
+            } else {
+                addedMembers[addedMembers.length] = name
+            }
+        } else {
+            if (addedMembers.indexOf(name) > -1) {
+                addedMembers.splice(addedMembers.indexOf(name),1)
+            } else {
+                removedMembers[removedMembers.length] = name
+            }
+        }
+
+        if (addedMembers.length == 0 && removedMembers.length == 0) {
+            $('#saveButton').attr('disabled', 'disabled')
+        } else {
+            $('#saveButton').removeAttr("disabled")
+        }
+    }
+
     $(document).ready(function() {
-        $(".selectedMember").change(function(event) {
-            v = $(this).val();
-
-            name = '${prefix}' + $(this).attr('value');
-            if ($(this).is(':checked')) {
-                if (removedMembers.indexOf(name) > -1) {
-                    removedMembers.splice(removedMembers.indexOf(name),1)
-                } else {
-                    addedMembers[addedMembers.length] = name
-                }
-            } else {
-                if (addedMembers.indexOf(name) > -1) {
-                    addedMembers.splice(addedMembers.indexOf(name),1)
-                } else {
-                    removedMembers[removedMembers.length] = name
-                }
-            }
-
-            if (addedMembers.length == 0 && removedMembers.length == 0) {
-                $('#saveButton').attr('disabled', 'disabled')
-            } else {
-                $('#saveButton').removeAttr("disabled")
-            }
-//            if ($(this).is(':checked') && $('#removedMembers'))})
-        })
-
         $('#cbSelectedAllMembers').click(function() {
             var state=this.checked;
             $.each($(':checkbox[name="selectedMembers"]'), function() {
