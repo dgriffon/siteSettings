@@ -82,10 +82,15 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.jahia.data.viewhelper.principal.PrincipalViewHelper;
 import org.jahia.registries.ServicesRegistry;
+import org.jahia.services.content.JCRContentUtils;
+import org.jahia.services.content.JCRNodeWrapper;
+import org.jahia.services.content.JCRSessionFactory;
+import org.jahia.services.content.JCRSessionWrapper;
 import org.jahia.services.content.decorator.JCRUserNode;
 import org.jahia.services.preferences.user.UserPreferencesHelper;
 import org.jahia.services.pwdpolicy.JahiaPasswordPolicyService;
 import org.jahia.services.pwdpolicy.PolicyEnforcementResult;
+import org.jahia.services.query.QueryResultWrapper;
 import org.jahia.services.usermanager.JahiaUserManagerService;
 import org.jahia.utils.i18n.Messages;
 import org.slf4j.Logger;
@@ -96,6 +101,7 @@ import org.springframework.binding.validation.ValidationContext;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import javax.jcr.RepositoryException;
+import javax.jcr.query.Query;
 
 /**
  * @author rincevent
@@ -108,7 +114,7 @@ public class UserProperties implements Serializable {
     private static final String[] BASIC_USER_PROPERTIES = new String[]{"j:firstName", "j:lastName", "j:email", "j:organization", "emailNotificationsDisabled", "j:accountLocked", "preferredLanguage"};
 
     public static void validateCreateUser(String username, String password, String passwordConfirm, String email,
-                                          MessageContext messages) {
+                                          String siteKey, MessageContext messages) {
         if (username == null || username.isEmpty()) {
             messages.addMessage(new MessageBuilder()
                     .error()
@@ -119,7 +125,32 @@ public class UserProperties implements Serializable {
                     .error()
                     .source("username")
                     .code("siteSettings.user.errors.username.syntax").build());
-        } else if (ServicesRegistry.getInstance().getJahiaUserManagerService().userExists(username)) {
+        } else if (siteKey == null) {
+            if (ServicesRegistry.getInstance().getJahiaUserManagerService().userExists(username)) {
+                messages.addMessage(new MessageBuilder()
+                        .error()
+                        .source("username")
+                        .defaultText(Messages.getInternal("label.username", LocaleContextHolder.getLocale()) + " '" + username + "' " +
+                                Messages.get("resources.JahiaSiteSettings", "siteSettings.user.errors.username.exist",
+                                        LocaleContextHolder.getLocale())).build());
+            } else {
+                // Global check on all existing sites
+                try {
+                    JCRSessionWrapper session = JCRSessionFactory.getInstance().getCurrentSystemSession(null, (Locale) null, (Locale) null);
+                    QueryResultWrapper result = session.getWorkspace().getQueryManager().createQuery("select * from [jnt:user] where localname()='" + JCRContentUtils.sqlEncode(username) + "'", Query.JCR_SQL2).execute();
+                    if (result.getNodes().hasNext()) {
+                        messages.addMessage(new MessageBuilder()
+                                .error()
+                                .source("username")
+                                .defaultText(Messages.getInternal("label.username", LocaleContextHolder.getLocale()) + " '" + username + "' " +
+                                        Messages.getWithArgs("resources.JahiaSiteSettings", "siteSettings.user.errors.username.existOnSite",
+                                                LocaleContextHolder.getLocale(), ((JCRNodeWrapper)result.getNodes().nextNode()).getResolveSite().getName())).build());
+                    }
+                } catch (RepositoryException e) {
+                    logger.error("Cannot execute query ",e);
+                }
+            }
+        } else if (ServicesRegistry.getInstance().getJahiaUserManagerService().userExists(username, siteKey)) {
             messages.addMessage(new MessageBuilder()
                     .error()
                     .source("username")
@@ -195,7 +226,7 @@ public class UserProperties implements Serializable {
     }
 
     public static void validateUpdateUser(String userKey, String password, String passwordConfirm, String email,
-                                          MessageContext messages) {
+                                          String siteKey, MessageContext messages) {
         validatePasswordExistingUser(userKey, password, passwordConfirm, messages);
         validateEmail(email, messages);
     }
@@ -215,6 +246,7 @@ public class UserProperties implements Serializable {
 
     private boolean readOnly;
     private boolean external;
+    private String siteKey;
 
     private Set<String> readOnlyProperties = new HashSet<String>();
 
@@ -312,6 +344,14 @@ public class UserProperties implements Serializable {
         this.external = external;
     }
 
+    public String getSiteKey() {
+        return siteKey;
+    }
+
+    public void setSiteKey(String siteKey) {
+        this.siteKey = siteKey;
+    }
+
     public void setAccountLocked(Boolean accountLocked) {
         this.accountLocked = accountLocked;
     }
@@ -369,11 +409,11 @@ public class UserProperties implements Serializable {
     }
 
     public void validateCreateUser(ValidationContext context) {
-        validateCreateUser(username, password, passwordConfirm, email, context.getMessageContext());
+        validateCreateUser(username, password, passwordConfirm, email, siteKey, context.getMessageContext());
     }
 
     public void validateEditUser(ValidationContext context) {
-        validateUpdateUser(userKey, password, passwordConfirm, email, context.getMessageContext());
+        validateUpdateUser(userKey, password, passwordConfirm, email, siteKey, context.getMessageContext());
     }
 
     public void populate(JCRUserNode jahiaUser) {

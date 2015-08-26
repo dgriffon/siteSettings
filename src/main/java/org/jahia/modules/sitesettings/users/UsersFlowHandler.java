@@ -245,7 +245,9 @@ public class UsersFlowHandler implements Serializable {
     }
 
     public UserProperties initUser() {
-        return new UserProperties();
+        UserProperties properties = new UserProperties();
+        properties.setSiteKey(siteKey);
+        return properties;
     }
 
     public UserProperties populateUser(String selectedUser) {
