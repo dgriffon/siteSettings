@@ -19,7 +19,7 @@
 <%--@elvariable id="flowExecutionUrl" type="java.lang.String"--%>
 <%--@elvariable id="searchCriteria" type="org.jahia.services.usermanager.SearchCriteria"--%>
 
-<c:set var="memberDisplayLimit" value="${functions:default(fn:escapeXml(param.displayLimit), siteSettingsProperties.memberDisplayLimit)}"/>
+<c:set var="memberDisplayLimit" value="${functions:default(fn:escapeXml(displayLimit), siteSettingsProperties.memberDisplayLimit)}"/>
 
 <template:addResources type="javascript" resources="jquery.min.js,jquery-ui.min.js,jquery.blockUI.js,workInProgress.js,admin-bootstrap.js"/>
 <template:addResources type="css" resources="admin-bootstrap.css,jquery-ui.smoothness.css,jquery-ui.smoothness-jahia.css"/>
@@ -98,7 +98,7 @@ $(document).ready(function() {
 
 <c:set var="membersFound" value="${memberCount > 0}"/>
 
-<form action="${flowExecutionUrl}" method="post" style="display: inline;">
+<form action="${flowExecutionUrl}" method="POST" style="display: inline;">
 <div>
     <div>
         <button class="btn" type="submit" name="_eventId_cancel">
@@ -154,7 +154,7 @@ $(document).ready(function() {
                     <fmt:param value="${memberDisplayLimit}"/>
                 </fmt:message>
                 <input type="hidden" id="memberFormDisplayLimit" name="displayLimit" value="<%= Integer.MAX_VALUE %>" />
-                <button class="btn" type="submit" name="refresh">
+                <button class="btn" type="submit" name="_eventId_refresh">
                     <i class="icon-search"></i>
                     &nbsp;<fmt:message key="siteSettings.groups.members.showAll"/>
                 </button>

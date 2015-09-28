@@ -59,7 +59,9 @@
         <transition on="removeMembers" to="editGroup" validate="false">
             <evaluate expression="flowHandler.removeMembers(flowScope.groupKey, requestParameters.selectedMembers, messageContext)"/>
         </transition>
-        <transition on="refresh" to="editGroup" validate="false"/>
+        <transition on="refresh" to="editGroup" validate="false">
+            <set name="flashScope.displayLimit" value="requestParameters.displayLimit" type="java.lang.Integer" />
+        </transition>
         <transition on="cancel" to="manageGroups" bind="false" validate="false"/>
     </view-state>
 
