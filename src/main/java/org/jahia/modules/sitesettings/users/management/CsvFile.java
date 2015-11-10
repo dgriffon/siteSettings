@@ -85,7 +85,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class CsvFile implements Serializable {
     private static final long serialVersionUID = 2592011306396271299L;
     private String csvSeparator;
-    private transient MultipartFile csvFile;
+    private MultipartFile csvFile;
 
     public String getCsvSeparator() {
         return csvSeparator;
