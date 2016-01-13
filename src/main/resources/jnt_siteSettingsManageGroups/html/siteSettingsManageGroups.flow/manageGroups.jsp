@@ -144,7 +144,7 @@ function submitGroupForm(act, group) {
                         <tr>
                             <td>${loopStatus.count}</td>
                             <td>
-                                <a title="${i18nEdit}" href="#edit" onclick="submitGroupForm('editGroup', '${grp.groupKey}'); return false;">${fn:escapeXml(user:displayName(grp))}</a>
+                                <a title="${i18nEdit}" href="#edit" onclick="submitGroupForm('editGroup', '${functions:escapeJavaScript(grp.groupKey)}'); return false;">${fn:escapeXml(user:displayName(grp))}</a>
                             </td>
                             <c:if test="${multipleProvidersAvailable}">
                                 <fmt:message var="i18nProviderLabel" key="providers.${grp.providerName}.label"/>
