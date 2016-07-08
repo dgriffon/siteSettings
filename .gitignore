@@ -1,4 +1,6 @@
+/src/main/import/repository.xml.generated
 /target/
 /.classpath
 /.project
 /.settings
+/*.iml
